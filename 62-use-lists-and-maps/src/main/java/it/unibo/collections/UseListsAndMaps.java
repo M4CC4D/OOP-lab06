@@ -1,12 +1,11 @@
 package it.unibo.collections;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -17,27 +16,33 @@ public final class UseListsAndMaps {
 
     public static int FROM = 1000;
     public static int TO = 2000;
-    public static int TEST = 100000;
+    public static int TESTADDFIRST = 100000;
+    public static int TESTGETMIDLE = 1000;
+
+    public static long POPULATIONAFRICA = 1110635000;
+    public static long POPULATIONAMERICAS = 972005000;
+    public static long POPULATIONANTARCTICA = 0;
+    public static long POPULATIONASIA = 429872300;
+    public static long POPULATIONEUROPE = 742452000;
+    public static long POPULATIONOCEANIA = 38304000;
 
     private UseListsAndMaps() {
     }
 
     public static void testAddFirst(List<Integer> l) {
-        long time = System.nanoTime();
-        for(int i = TO; i < TEST + TO; i++) {
+        Time t = new Time();
+        for(int i = TO; i < TESTADDFIRST + TO; i++) {
             l.addFirst(i);
         }
-        time = System.nanoTime() - time;
-        final var millis = TimeUnit.NANOSECONDS.toMillis(time);
-        IO.println(
-            "Converting "
-                + l.size()
-                + " ints to String and inserting them in a Set took "
-                + time
-                + "ns ("
-                + millis
-                + "ms)"
-        );
+        t.<Integer>stmpTimeOfList(l);
+    }
+
+    public static void testGetMidle(List<Integer> l) {
+        Time t = new Time();
+        for(int i = 0; i < TESTGETMIDLE; i++) {
+            l.get(l.size() / 2);
+        }
+        t.<Integer>stmpTimeOfList(l);
     }
 
     /**
@@ -50,7 +55,7 @@ public final class UseListsAndMaps {
          */
         ArrayList<Integer> ar = new ArrayList<>();
 
-        for(int i = FROM; i < TO; i++ ){
+        for(int i = FROM; i <= TO; i++ ){
             ar.add(i);
         }
         /*
@@ -66,8 +71,8 @@ public final class UseListsAndMaps {
          */
         var previous = ar.getFirst();
         var last = ar.getLast();
-        ar.set(FROM - FROM, last);
-        ar.set(ar.size(), previous);
+        ar.set(0, last);
+        ar.set(ar.size() - 1, previous);
         /*
          * 4) Using a single for-each, print the contents of the arraylist.
          */
@@ -89,6 +94,8 @@ public final class UseListsAndMaps {
          * LinkedList, using the collections of point 5. In order to measure
          * times, use as example TestPerformance.java.
          */
+        testGetMidle(ar);
+        testGetMidle(ll);
         /*
          * 7) Build a new Map that associates to each continent's name its
          * population:
@@ -105,6 +112,14 @@ public final class UseListsAndMaps {
          *
          * Oceania -> 38,304,000
          */
+        Map<String, Long> m = new HashMap<>();
+        m.put("Africa", POPULATIONAFRICA);
+        m.put("Americas", POPULATIONAMERICAS);
+        m.put("Antarctica", POPULATIONANTARCTICA);
+        m.put("Asia", POPULATIONASIA);
+        m.put("Europe", POPULATIONEUROPE);
+        m.put("Oceania", POPULATIONOCEANIA);
+        
         /*
          * 8) Compute the population of the world
          */
