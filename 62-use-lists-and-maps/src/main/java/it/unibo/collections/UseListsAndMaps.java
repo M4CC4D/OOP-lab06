@@ -22,7 +22,7 @@ public final class UseListsAndMaps {
     private UseListsAndMaps() {
     }
 
-    public static void test(List<Integer> l) {
+    public static void testAddFirst(List<Integer> l) {
         long time = System.nanoTime();
         for(int i = TO; i < TEST + TO; i++) {
             l.addFirst(i);
@@ -81,8 +81,8 @@ public final class UseListsAndMaps {
          * using the previous lists. In order to measure times, use as example
          * TestPerformance.java.
          */
-        test(ar);
-        test(ll);
+        testAddFirst(ar);
+        testAddFirst(ll);
         /*
          * 6) Measure the performance of reading 1000 times an element whose
          * position is in the middle of the collection for both ArrayList and
