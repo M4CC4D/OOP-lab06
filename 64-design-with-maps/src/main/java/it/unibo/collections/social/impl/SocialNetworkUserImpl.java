@@ -38,7 +38,7 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *
      * think of what type of keys and values would best suit the requirements
      */
-
+    Map<String, Set<U>> map = new HashMap<>();
     /*
      * [CONSTRUCTORS]
      *
@@ -64,13 +64,15 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *            application
      */
     public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
-        super(null, null, null, 0);
+        super(name, surname ,user, userAge);
     }
 
     /*
      * 2) Define a further constructor where the age defaults to -1
      */
-
+    public SocialNetworkUserImpl(final String name, final String surname, final String user) {
+        super(name, surname ,user);
+    }
     /*
      * [METHODS]
      *
@@ -78,7 +80,15 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
-        return false;
+        if(map.containsKey(circle)) {
+            map.get(circle).add(user);
+            return false;
+        } else {
+            HashSet<U> set = new HashSet<>();
+            set.add(user);
+            map.put(circle, new HashSet<>(set));
+            return true;
+        }
     }
 
     /**
@@ -88,11 +98,19 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-        return null;
+        if(map.containsKey(groupName)) {
+            return new HashSet<>(map.get(groupName));
+        }
+        return Collections.emptySet();
+
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        return null;
+        List<U> l = new ArrayList<>();
+        for(String s : map.keySet()) {
+            l.addAll(getFollowedUsersInGroup(s));
+        }
+        return l;
     }
 }
