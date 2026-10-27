@@ -1,9 +1,13 @@
 package it.unibo.collections;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * Example class using {@link List} and {@link Map}.
@@ -12,9 +16,28 @@ import java.util.Map;
 public final class UseListsAndMaps {
 
     public static int FROM = 1000;
-    public static int TO = 1000;
+    public static int TO = 2000;
+    public static int TEST = 100000;
 
     private UseListsAndMaps() {
+    }
+
+    public static void test(List<Integer> l) {
+        long time = System.nanoTime();
+        for(int i = TO; i < TEST + TO; i++) {
+            l.addFirst(i);
+        }
+        time = System.nanoTime() - time;
+        final var millis = TimeUnit.NANOSECONDS.toMillis(time);
+        IO.println(
+            "Converting "
+                + l.size()
+                + " ints to String and inserting them in a Set took "
+                + time
+                + "ns ("
+                + millis
+                + "ms)"
+        );
     }
 
     /**
@@ -58,6 +81,8 @@ public final class UseListsAndMaps {
          * using the previous lists. In order to measure times, use as example
          * TestPerformance.java.
          */
+        test(ar);
+        test(ll);
         /*
          * 6) Measure the performance of reading 1000 times an element whose
          * position is in the middle of the collection for both ArrayList and
