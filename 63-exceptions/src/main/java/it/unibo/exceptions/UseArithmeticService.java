@@ -1,8 +1,10 @@
 package it.unibo.exceptions;
 
 import it.unibo.exceptions.fakenetwork.api.NetworkComponent;
+import it.unibo.exceptions.fakenetwork.api.NetworkException;
 import it.unibo.exceptions.fakenetwork.impl.ServiceBehindUnstableNetwork;
 
+import java.io.IOException;
 import java.io.PrintStream;
 
 import static it.unibo.exceptions.arithmetic.ArithmeticService.DIVIDED;
@@ -24,8 +26,9 @@ public final class UseArithmeticService {
 
     /**
      * Program entry point.
+     * @throws NetworkException 
      */
-    public static void main() {
+    public static void main() throws NetworkException {
         try {
             new ServiceBehindUnstableNetwork(1);
             throw new AssertionError("Expected an IllegalArgumentException, but no Exception was thrown");
@@ -48,6 +51,14 @@ public final class UseArithmeticService {
          * This method should re-try to send message to the provided server, catching all IOExceptions,
          * until it succeeds.
          */
+        Boolean b = true;
+        while(b){
+            try {
+                server.sendData(message);
+                b = false;
+            } catch(IOException e) {
+            }
+        }
     }
 
     private static String retryReceiveOnNetworkError(final NetworkComponent server) {
@@ -55,7 +66,13 @@ public final class UseArithmeticService {
          * This method should re-try to retrieve information from the provided server, catching all IOExceptions,
          * until it succeeds.
          */
-        return null;
+        while(true){
+            try {
+                var recive = server.receiveResponse();
+                return recive;
+            } catch(IOException e) {
+            }
+        }
     }
 
     private static void assertEqualsAsDouble(final String expected, final String actual) {

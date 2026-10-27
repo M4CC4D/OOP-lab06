@@ -2,6 +2,7 @@ package it.unibo.exceptions.fakenetwork.impl;
 
 import it.unibo.exceptions.arithmetic.ArithmeticService;
 import it.unibo.exceptions.fakenetwork.api.NetworkComponent;
+import it.unibo.exceptions.fakenetwork.api.NetworkException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,26 +25,35 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
     /**
      * @param failProbability the probability that a network communication fails
      * @param randomSeed random generator seed for reproducibility
+     * @throws NetworkException 
      */
-    public ServiceBehindUnstableNetwork(final double failProbability, final int randomSeed) {
+    public ServiceBehindUnstableNetwork(final double failProbability, final int randomSeed) throws NetworkException {
         /*
          * The probability should be in [0, 1[!
          */
+        if(failProbability <= 0 || failProbability > 1){
+            throw new NetworkException("The fail probability should be with 0 and 1(1 included)");
+        }
         this.failProbability = failProbability;
         randomGenerator = new Random(randomSeed);
     }
 
+
     /**
      * @param failProbability the probability that a network communication fails
      */
-    public ServiceBehindUnstableNetwork(final double failProbability) {
+    public ServiceBehindUnstableNetwork(final double failProbability) throws NetworkException {
+        if(failProbability <= 0 || failProbability > 1){
+            throw new NetworkException("The fail probability should be with 0 and 1(1 included)");
+        }
         this(failProbability, 0);
     }
 
     /**
      * Builds a new service with an unstable network.
+     * @throws NetworkException 
      */
-    public ServiceBehindUnstableNetwork() {
+    public ServiceBehindUnstableNetwork() throws NetworkException {
         this(0.5);
     }
 
